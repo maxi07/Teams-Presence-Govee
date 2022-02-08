@@ -150,7 +150,7 @@ brightness_led = 100
 sleepValue = 5 # seconds
 color_green = {"r": 0, "g": 255, "b": 0}
 color_red = {"r": 255, "g": 0, "b": 0}
-color_yellow = {"r": 255, "g": 190, "b": 0}
+color_yellow = {"r": 255, "g": 165, "b": 0}
 color_pink = {"r": 153, "g": 0, "b": 153}
 color_blue = {"r": 0, "g": 153, "b": 255}
 # #############
@@ -289,13 +289,13 @@ def is_connected():
 
 # Checks for updates
 def checkUpdate():
-	updateUrl = "https://raw.githubusercontent.com/maxi07/Teams-Presence-Hue/master/doc/version"
+	updateUrl = "https://raw.githubusercontent.com/maxi07/Teams-Presence-Govee/master/doc/version"
 	try:
 		f = requests.get(updateUrl, timeout=10)
 		latestVersion = float(f.text)
 		if latestVersion > version:
 			printwarning("There is an update available.")
-			printwarning("Head over to https://github.com/maxi07/Teams-Presence-Hue to get the latest features.")
+			printwarning("Head over to https://github.com/maxi07/Teams-Presence-Govee to get the latest features.")
 		else:
 			print("Application is running latest version.")
 	except Exception as e:

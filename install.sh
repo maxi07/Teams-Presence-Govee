@@ -11,5 +11,4 @@ echo Installing qrcode module
 sudo pip3 install pyqrcode
 echo Installing Microsoft Office authentication library
 sudo pip3 install msal
-echo Installing Hue extension
-sudo pip3 install phue
+
