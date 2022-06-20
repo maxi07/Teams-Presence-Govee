@@ -147,7 +147,7 @@ token=''
 points = []
 fullname = ''
 brightness_led = 100
-sleepValue = 5 # seconds
+sleepValue = 15 # seconds
 color_green = {"r": 0, "g": 255, "b": 0}
 color_red = {"r": 255, "g": 0, "b": 0}
 color_yellow = {"r": 255, "g": 165, "b": 0}
@@ -202,7 +202,11 @@ def sendCommand(name, value):
 	url = "https://developer-api.govee.com/v1/devices/control"
 	headers = {"Govee-API-Key": apikey, "Content-Type": "application/json"}
 	params = {"device": deviceid, "model": model, "cmd":{"name": name, "value": value}}
+#	print("URL: " + str(url))
+#	print("headers: " + str(headers))
+#	print("params: " + str(params))
 	r = requests.put(url, headers=headers, data=json.dumps(params))
+#	print(r.content)
 	if r.status_code != 200:
 		printerror("Failed sending command, returned " + str(r.status_code))
 		printerror(r.reason)
@@ -285,6 +289,9 @@ def is_connected():
 		return True
 	except OSError:
 		pass
+	except:
+		print("Unexpected error:", sys.exc_info()[0])
+		return False
 	return False
 
 # Checks for updates
