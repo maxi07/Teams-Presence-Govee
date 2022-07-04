@@ -63,6 +63,7 @@ version = 1.0
 print("Booting v" + str(version))
 
 def readDevices(api):
+	try:
 		print("Reading devices...")
 		url = "https://developer-api.govee.com/v1/devices"
 		headers = {"Govee-API-Key": api}
@@ -71,6 +72,9 @@ def readDevices(api):
 			return r.content
 		else:
 			return None
+	except Exception as e:
+		printerror("Failed reading devices.")
+		printerror(str(e))
 
 # Read config
 config = configparser.ConfigParser()
@@ -205,38 +209,38 @@ def sendCommand(name, value):
 #	print("URL: " + str(url))
 #	print("headers: " + str(headers))
 #	print("params: " + str(params))
-	r = requests.put(url, headers=headers, data=json.dumps(params))
-#	print(r.content)
-	if r.status_code != 200:
-		printerror("Failed sending command, returned " + str(r.status_code))
-		printerror(r.reason)
+	try:
+		r = requests.put(url, headers=headers, data=json.dumps(params))
+#		print(r.content)
+#		print(str(r.status_code))
+		if r.status_code != 200:
+			printerror("Failed sending command, returned " + str(r.status_code))
+			printerror(r.reason)
+	except Exception as e:
+		printerror("Failed sending command, unknown error.")
+		printerror(str(e))
 
 def switchOff():
 	sendCommand("turn", "off")
 
 def switchOn():
 	sendCommand("turn", "on")
-
+	sendCommand("brightness", brightness_led)
 
 def switchGreen():
 	sendCommand('color', color_green)
-	sendCommand("brightness", brightness_led)
 
 def switchRed():
 	sendCommand('color', color_red)
-	sendCommand("brightness", brightness_led)
 
 def switchYellow():
 	sendCommand('color', color_yellow)
-	sendCommand("brightness", brightness_led)
 
 def switchPink():
 	sendCommand('color', color_pink)
-	sendCommand("brightness", brightness_led)
 
 def switchBlue():
 	sendCommand('color', color_blue)
-	sendCommand("brightness", brightness_led)
 
 #Handles Ctrl+C
 def handler(signal_received, frame):
@@ -307,7 +311,7 @@ def checkUpdate():
 			print("Application is running latest version.")
 	except Exception as e:
 		printerror("An error occured while searching for updates.")
-		printerror(e)
+		printerror(str(e))
 
 ##################################################
 
@@ -316,6 +320,7 @@ def Authorize():
 	global token
 	global fullname
 	print("Starting authentication workflow.")
+	switchOff()
 	try:
 		cache = msal.SerializableTokenCache()
 		if os.path.exists('token_cache.bin'):
@@ -356,6 +361,7 @@ def Authorize():
 				fullname = y['givenName'] + " " + y['surname']
 				print("Token found, welcome " + y['givenName'] + "!")
 				return True
+				switchOn()
 			except requests.exceptions.HTTPError as err:
 				if err.response.status_code == 404:
 					printerror("MS Graph URL is invalid!")
