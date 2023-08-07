@@ -152,6 +152,7 @@ color_red = {"r": 255, "g": 0, "b": 0}
 color_yellow = {"r": 255, "g": 165, "b": 0}
 color_pink = {"r": 153, "g": 0, "b": 153}
 color_blue = {"r": 0, "g": 153, "b": 255}
+current_color = None
 # #############
 
 # Check for arguments
@@ -196,7 +197,15 @@ def sendCommand(name, value):
 
 	:name: The name of the command, eg. turn
 	:value: The value of the command, eg. on
-	""" 
+	"""
+
+	# Check for color difference
+	global current_color
+	if name=='color':
+		if value==current_color:
+			return
+		else:
+			current_color = value
 	url = "https://developer-api.govee.com/v1/devices/control"
 	headers = {"Govee-API-Key": apikey, "Content-Type": "application/json"}
 	params = {"device": deviceid, "model": model, "cmd":{"name": name, "value": value}}
